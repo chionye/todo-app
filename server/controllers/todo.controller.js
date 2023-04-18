@@ -1,6 +1,6 @@
 /** @format */
 
-const todoModel = require("../model/todo.model");
+const todoModel = require("../models/todo.model");
 
 exports.create = (req, res) => {
   if (!req.body.title) {
