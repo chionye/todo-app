@@ -1,8 +1,9 @@
 /** @format */
 
-const todoModel = require("../models/todo.model");
+const { todo } = require("../models");
 
 exports.create = (req, res) => {
+  console.log(req.body);
   if (!req.body.title) {
     res.status(400).send({
       message: "Content can not be empty!",
@@ -10,8 +11,8 @@ exports.create = (req, res) => {
     return;
   }
 
-  const todo = {
-    todoId: req.body.id,
+  const data = {
+    uid: req.body.uid,
     title: req.body.title,
     description: req.body.description,
     category: req.body.category,
@@ -19,8 +20,8 @@ exports.create = (req, res) => {
     time: req.body.time,
   };
 
-  todoModel
-    .create(todo)
+  todo
+    .create(data)
     .then((data) => {
       res.send(data);
     })
@@ -35,7 +36,7 @@ exports.findAll = (req, res) => {
   const id = req.query.id;
   const condition = id ? { todoId: id } : null;
 
-  todoModel
+  todo
     .findAll({ where: condition })
     .then((data) => {
       res.send(data);
@@ -50,7 +51,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  todoModel
+  todo
     .findByPk(id)
     .then((data) => {
       if (data) {
@@ -71,12 +72,12 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  todoModel
+  todo
     .update(req.body, {
       where: { id: id },
     })
     .then((num) => {
-      if (num == 1) {
+      if (num === 1) {
         res.send({
           message: "Update successful.",
         });
@@ -96,12 +97,12 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  todoModel
+  todo
     .destroy({
       where: { id: id },
     })
     .then((num) => {
-      if (num == 1) {
+      if (num === 1) {
         res.send({
           message: "Delete successful",
         });

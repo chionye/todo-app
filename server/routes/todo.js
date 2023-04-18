@@ -1,10 +1,10 @@
-const todo = require("../controllers/todo.controller.js");
+const todo = require("../controllers/todo.js");
 
 var router = require("express").Router();
 
-router.post("/", todo.create);
-
 router.get("/", todo.findAll);
+
+router.post("/", todo.create);
 
 router.get("/:id", todo.findOne);
 

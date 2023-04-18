@@ -1,22 +1,22 @@
 /** @format */
 
-const userModel = require("../models/user.model");
+const { user } = require("../models");
 
 exports.create = (req, res) => {
-  if (!req.body.title) {
+  if (!req.body.email) {
     res.status(400).send({
       message: "Content can not be empty!",
     });
     return;
   }
 
-  const user = {
+  const data = {
     email: req.body.email,
     password: req.body.password,
   };
 
-  userModel
-    .create(user)
+  user
+    .create(data)
     .then((data) => {
       res.send(data);
     })
@@ -30,7 +30,7 @@ exports.create = (req, res) => {
 exports.findOne = (req, res) => {
   const email = req.params.email;
 
-  userModel
+  user
     .findOne({ where: { email: email } })
     .then((data) => {
       if (data) {
