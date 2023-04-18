@@ -6,6 +6,7 @@ module.exports = {
   pass: process.env.PASS,
   db: process.env.DB,
   dialect: process.env.DIALECT,
+  secret: process.env.SECRET,
   pool: {
     max: 5,
     min: 0,
