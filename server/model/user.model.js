@@ -1,22 +1,20 @@
 /** @format */
 
-const sq = require("../index.js");
+const sq = require("./index.js");
 const { DataTypes } = require("sequelize");
+const todo = require("./todo.model.js");
 
-const Todo = sq.define("todo", {
+const User = sq.define("user", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
     allowNull: false,
   },
-  title: {
+  email: {
     type: DataTypes.STRING,
   },
-  description: {
-    type: DataTypes.STRING,
-  },
-  category: {
+  password: {
     type: DataTypes.STRING,
   },
   createdAt: {
@@ -29,8 +27,10 @@ const Todo = sq.define("todo", {
   },
 });
 
-Todo.sync().then(() => {
-  console.log("Todo Model synced");
+User.hasOne(todo);
+
+User.sync().then(() => {
+  console.log("User Model synced");
 });
 
-module.exports = Todo;
+module.exports = User;
