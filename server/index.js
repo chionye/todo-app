@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 db.sequelize.sync().then(() => {
-  console.log("db has been re sync");
+  console.log("Sync successful");
 });
 
 app.use('/todo', todo);

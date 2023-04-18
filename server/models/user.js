@@ -10,6 +10,12 @@ const User = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
+      unique: true,
+      validate: {
+        isEmail: {
+          msg: "Must be a valid email address",
+        },
+      },
     },
     password: {
       type: DataTypes.STRING,
