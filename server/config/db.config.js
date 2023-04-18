@@ -1,8 +1,8 @@
 require("dotenv").config();
 
 module.exports = {
-  host: process.end.APP_PORT,
-  user: process.end.USER,
+  host: process.env.APP_PORT,
+  user: process.env.USER,
   pass: process.env.PASS,
   db: process.env.DB,
   dialect: process.env.DIALECT,
