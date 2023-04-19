@@ -1,0 +1,96 @@
+input[type="checkbox"] {
+    width: 20px;
+    height: 14px;
+}
+
+.task input[type="text"],
+.task textarea {
+    border: none;
+    background-color: transparent;
+}
+
+.task input[type="text"]:focus,
+.task textarea:focus {
+    border: none;
+    outline: none;
+}
+
+input[type="checkbox"]:checked {
+    background-color: red;
+}
+
+.title {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+
+.task {
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    margin: 5px 0;
+}
+
+.content {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.flex {
+    display: flex;
+    align-items: start;
+}
+
+.task:hover {
+    box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+}
+
+label {
+    margin-bottom: 2px;
+    font-size: 14px;
+    color: black;
+}
+
+.flex-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+}
+
+.flex-group .form-group {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 10px 5px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+.modal h2,
+.modal h3 {
+    margin: 10px 0;
+}
+
+.auto-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    column-gap: 10px;
+}
+
+@media screen and (max-width: 600px) {
+    .task {
+        width: 100%;
+    }
+}
