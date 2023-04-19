@@ -21,8 +21,8 @@ db.sequelize = sequelize;
 const User = require("./user")(sequelize, DataTypes);
 const Todo = require("./todo")(sequelize, DataTypes);
 
-User.hasOne(Todo, { foreignKey: "uid", sourceKey: "id" });
-Todo.belongsTo(User, { foreignKey: "uid", sourceKey: "id" });
+User.hasMany(Todo, { foreignKey: "email", sourceKey: "email" });
+Todo.belongsTo(User, { foreignKey: "email", sourceKey: "email" });
 
 db.user = User;
 db.todo = Todo;

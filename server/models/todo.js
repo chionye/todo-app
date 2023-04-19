@@ -6,17 +6,24 @@ const Todo = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false,
     },
-    uid: {
-      type: DataTypes.INTEGER,
+    email: {
+      type: DataTypes.STRING,
     },
     title: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     description: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     category: {
       type: DataTypes.STRING,
+    },
+    completed: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     date: {
       type: DataTypes.STRING,
@@ -27,7 +34,10 @@ const Todo = (sequelize, DataTypes) => {
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
   });
   return todo;

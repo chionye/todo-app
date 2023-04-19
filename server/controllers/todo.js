@@ -3,7 +3,6 @@
 const { todo } = require("../models");
 
 exports.create = (req, res) => {
-  console.log(req.body);
   if (!req.body.title) {
     res.status(400).send({
       message: "Content can not be empty!",
@@ -12,7 +11,7 @@ exports.create = (req, res) => {
   }
 
   const data = {
-    uid: req.body.uid,
+    email: req.body.email,
     title: req.body.title,
     description: req.body.description,
     category: req.body.category,
@@ -34,7 +33,7 @@ exports.create = (req, res) => {
 
 exports.findAll = (req, res) => {
   const id = req.query.id;
-  const condition = id ? { todoId: id } : null;
+  const condition = id ? { uid: id } : null;
 
   todo
     .findAll({ where: condition })

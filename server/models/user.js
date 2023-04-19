@@ -11,6 +11,7 @@ const User = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       unique: true,
+      allowNull: false,
       validate: {
         isEmail: {
           msg: "Must be a valid email address",
@@ -19,6 +20,7 @@ const User = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,
