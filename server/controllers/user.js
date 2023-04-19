@@ -49,10 +49,8 @@ exports.login = (req, res) => {
           let token = jwt.sign({ id: values.id }, config.secret, {
             expiresIn: 1 * 24 * 60 * 60 * 1000,
           });
-          res.cookie("jwt", token, {
-            maxAge: 1 * 24 * 60 * 60,
-            httpOnly: true,
-          });
+          values.accessToken = token;
+          res.cookie({ "token": token });
           res.status(201).send(values);
         } else {
           return res.status(401).send("Authentication failed");

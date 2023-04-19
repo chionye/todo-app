@@ -6,6 +6,7 @@ require("dotenv").config();
 const port = process.env.PORT || 8080;
 
 const db = require("./models");
+const auth = require("./middleware/auth");
 const todo = require("./routes/todo");
 const user = require("./routes/user");
 
@@ -20,7 +21,7 @@ db.sequelize.sync().then(() => {
   console.log("Sync successful");
 });
 
-app.use('/todo', todo);
+app.use('/todo', auth, todo);
 app.use('/user', user);
 
 app.listen(port, () => console.log(`listening on port: ${port}`));
