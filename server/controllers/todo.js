@@ -14,7 +14,7 @@ exports.create = (req, res) => {
     email: req.body.email,
     title: req.body.title,
     description: req.body.description,
-    category: req.body.category,
+    category: req.body.tag,
     date: req.body.date,
     time: req.body.time,
   };

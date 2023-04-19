@@ -3,7 +3,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config/db.config.js");
 
-const isAuthenticated = async (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   try {
     let token = req.headers["x-access-token"];
     if (!token) {
@@ -25,4 +25,4 @@ const isAuthenticated = async (req, res, next) => {
   }
 };
 
-module.exports = isAuthenticated;
+module.exports = verifyToken;

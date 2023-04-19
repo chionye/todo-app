@@ -5,27 +5,26 @@ import "./App.css";
 import { Button, Modal, Task } from "./components";
 import { Api } from "./api/Api";
 
-const API_URL = "http://localhost:8080";
-
 function App() {
   const [active, setActive] = useState(0);
-  const user = {
-    id: 1,
-    email: "user@gmail.com",
-  };
+  // const user = {
+  //   id: 1,
+  //   email: "user@gmail.com",
+  // };
   const [tasks, setTasks] = useState([]);
   const [modal, setModal] = useState(false);
+  const [filter, setFilter] = useState("");
   const [task, setTask] = useState({
     done: false,
   });
 
   useEffect(() => {
-    Api(`${API_URL}/getAll`, user, "POST", null)
-      .then((res) => res.json())
-      .then((data) => {
-        setTasks(data.data);
-      })
-      .catch((err) => console.log(err));
+    // Api(`/todo`, user, "POST", null)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setTasks(data.data);
+    //   })
+    //   .catch((err) => console.log(err));
   });
 
   const showTasks = () => {
@@ -45,7 +44,8 @@ function App() {
 
   const saveTask = (e) => {
     e.preventDefault();
-    Api(`${API_URL}/todo`, task, "POST", null)
+    task.email = "debs@gmail.com";
+    Api(`/todo`, task, "POST", null)
       .then((res) => res.json())
       .then((data) => console.log(data))
       .catch((err) => console.log(err));
@@ -54,6 +54,10 @@ function App() {
   const handleChange = (e) => {
     setTask({ ...task, [e.target.name]: e.target.value });
   };
+
+  const filterRecords = (e) => {
+    setFilter(e);
+  }
 
   return (
     <>

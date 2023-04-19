@@ -67,3 +67,14 @@ exports.login = (req, res) => {
       });
     });
 };
+
+exports.logout = (req, res) => {
+  const authHeader = req.headers["x-access-token"];
+  jwt.sign(authHeader, "", { expiresIn: 1 }, (logout, err) => {
+    if (logout) {
+      res.status(440).send({ message: "You have been Logged Out" });
+    } else {
+      res.status(500).send({ message: "Error" });
+    }
+  });
+}
