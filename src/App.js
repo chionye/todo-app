@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import AppProvider from './context/Context';
 import "./App.css";
 import Login from "./pages/Login";
+import Error from "./pages/Error";
 import Dashboard from "./pages/Dashboard";
+import { Auth } from "./auth/Auth";
 
 function App() {
   const router = createBrowserRouter([
@@ -14,6 +14,8 @@ function App() {
     {
       path: "dashboard",
       element: <Dashboard />,
+      loader: {Auth},
+      errorElement: <Error />
     },
     {
       path: "register",
@@ -21,11 +23,9 @@ function App() {
     },
   ]);
 
-return (
-  <AppProvider>
-    <RouterProvider router={router} />
-  </AppProvider>
-);
+  return (
+      <RouterProvider router={router} />
+  );
 }
 
 export default App;

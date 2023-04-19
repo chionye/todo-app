@@ -5,7 +5,6 @@
     --error: #F90606;
     --white: #fafafa;
     --dark: #00101d;
-
 }
 
 .wrapper {
@@ -24,8 +23,16 @@
     font-weight: 900;
 }
 
+
+.center-align{
+    text-align:center;
+}
+
 @media screen and (max-width: 600px) {
     .title {
         margin-top: 30%;
+    }
+    .error-image {
+        width: 250px
     }
 }

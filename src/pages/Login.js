@@ -1,16 +1,13 @@
-/** @format */
-
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useContext } from "react";
-import { AppContext } from "../context/Context";
+import React, { useState } from "react";
 import "../Login.css";
 import "../components/Input/Form.css";
 import { Input } from "../components/Input/Input";
 import { Api } from "../api/Api";
+import { Storage } from "../storage/Storage";
 
 function Login() {
   const navigate = useNavigate();
-  const context = useContext(AppContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,7 +18,8 @@ function Login() {
       Api(`/user/login`, user, "POST", null)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
+          Storage.set("user", JSON.stringify(data));
+          navigate("/dashboard");
         })
         .catch((err) => console.log(err));
     }

@@ -1,11 +1,12 @@
-/** @format */
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useNavigate } from "react";
 import "../App.css";
 import { Button, Modal, Task } from "../components";
 import { Api } from "../api/Api";
+import { Storage } from "../storage/Storage";
 
 function Dashboard() {
+  const navigate = useNavigate();
+  const [data, setData] = useState(JSON.parse(Storage.get("user")));
   const [active, setActive] = useState(0);
   const [tasks, setTasks] = useState([]);
   const [modal, setModal] = useState(false);
@@ -14,7 +15,9 @@ function Dashboard() {
     done: false,
   });
 
-  useEffect(() => {});
+  useEffect(() => {
+
+  });
 
   const showTasks = () => {
     setActive(0);
@@ -33,7 +36,7 @@ function Dashboard() {
 
   const saveTask = (e) => {
     e.preventDefault();
-    task.email = "debs@gmail.com";
+    task.email = data.email;
     Api(`/todo`, task, "POST", null)
       .then((res) => res.json())
       .then((data) => console.log(data))
@@ -48,14 +51,19 @@ function Dashboard() {
     setFilter(e);
   };
 
+  const logout = (e) => {
+    Storage.remove();
+    navigate("/");
+  };
+
   return (
     <>
       <header className='container header'>
         <div>
           <h1>Agenda</h1>
-          <p>debs@gmail.com</p>
+          <p>{data.email}</p>
         </div>
-        <button className='btn'>log out</button>
+        <button className='btn' onClick={logout}>log out</button>
       </header>
       <main>
         <section className='container'>

@@ -1,3 +1,12 @@
+:root {
+    --primary: #0092FF;
+    --secondary: #ff6f00;
+    --success: #05C91A;
+    --error: #F90606;
+    --white: #fafafa;
+    --dark: #00101d;
+}
+
 input[type="checkbox"] {
     width: 20px;
     height: 14px;
@@ -16,7 +25,7 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"]:checked {
-    background-color: red;
+    background-color: var(--error);
 }
 
 .title {
@@ -52,7 +61,7 @@ input[type="checkbox"]:checked {
 label {
     margin-bottom: 2px;
     font-size: 14px;
-    color: black;
+    color: var(--dark);
 }
 
 .flex-group {

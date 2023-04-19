@@ -1,3 +1,12 @@
+:root {
+  --primary: #0092FF;
+  --secondary: #ff6f00;
+  --success: #05C91A;
+  --error: #F90606;
+  --white: #fafafa;
+  --dark: #00101d;
+}
+
 .container {
   padding: 10px 2%;
 }
@@ -25,9 +34,10 @@
 }
 
 .btn {
-  background-color: burlywood;
+  background-color: var(--primary);
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   text-transform: capitalize;
+  color: var(--white)
 }

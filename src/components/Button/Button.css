@@ -1,3 +1,12 @@
+:root {
+    --primary: #0092FF;
+    --secondary: #ff6f00;
+    --success: #05C91A;
+    --error: #F90606;
+    --white: #fafafa;
+    --dark: #00101d;
+}
+
 .tabs {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -13,7 +22,7 @@
 }
 
 .tab:focus {
-    color: burlywood;
+    color: var(--primary);
 }
 
 .category {
@@ -26,9 +35,9 @@
 }
 
 .category:hover .icon {
-    border: 2px solid burlywood;
-    background-color: burlywood;
-    color: white;
+    border: 2px solid var(--primary);
+    background-color: var(--primary);
+    color: var(--white);
 }
 
 .icon {
@@ -50,7 +59,7 @@
 
 .category:hover .tag {
     font-weight: 600;
-    color: burlywood;
+    color: var(--primary);
 }
 
 .action {
