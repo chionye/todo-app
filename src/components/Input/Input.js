@@ -1,6 +1,4 @@
-/** @format */
-
-import "../styles/Form.css";
+import "./Form.css";
 
 export const Input = ({ label, handleChange, type, name, required }) => {
   return (
