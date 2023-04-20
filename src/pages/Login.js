@@ -15,7 +15,7 @@ function Login() {
     e.preventDefault();
     if (email && password) {
       const user = { email, password };
-      Api(`/user/login`, user, "POST", null)
+      Api(`/user/login`, user, "POST")
         .then((res) => res.json())
         .then((data) => {
           Storage.set("user", JSON.stringify(data));
@@ -24,6 +24,7 @@ function Login() {
         .catch((err) => console.log(err));
     }
   };
+  
   return (
     <div className='wrapper'>
       <h1 className='title'>Login</h1>

@@ -6,8 +6,8 @@ const Todo = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false,
     },
-    email: {
-      type: DataTypes.STRING,
+    uid: {
+      type: DataTypes.INTEGER,
     },
     title: {
       type: DataTypes.STRING,

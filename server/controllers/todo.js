@@ -11,7 +11,7 @@ exports.create = (req, res) => {
   }
 
   const data = {
-    email: req.body.email,
+    uid: req.body.uid,
     title: req.body.title,
     description: req.body.description,
     category: req.body.tag,
@@ -22,7 +22,7 @@ exports.create = (req, res) => {
   todo
     .create(data)
     .then((data) => {
-      res.send(data);
+      res.status(201).send(data);
     })
     .catch((err) => {
       res.status(500).send({
@@ -32,13 +32,13 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  const id = req.query.id;
+  const id = req.params.id;
   const condition = id ? { uid: id } : null;
 
   todo
-    .findAll({ where: condition })
+    .findAll({ where: condition, order: [["id", "DESC"]] })
     .then((data) => {
-      res.send(data);
+      res.status(201).send(data);
     })
     .catch((err) => {
       res.status(500).send({
@@ -49,7 +49,7 @@ exports.findAll = (req, res) => {
 
 exports.findOne = (req, res) => {
   const id = req.params.id;
-
+  
   todo
     .findByPk(id)
     .then((data) => {

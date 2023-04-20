@@ -14,8 +14,6 @@ function App() {
     {
       path: "dashboard",
       element: <Dashboard />,
-      loader: {Auth},
-      errorElement: <Error />
     },
     {
       path: "register",

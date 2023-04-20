@@ -14,7 +14,7 @@ export const Task = {
         <div className='flex'>
           <input
             type='checkbox'
-            checked={done === "false" ? false : true}></input>
+            checked={!done ? false : true}></input>
           <div className='content'>
             <input
               className='title'

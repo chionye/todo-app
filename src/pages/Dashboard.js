@@ -1,22 +1,22 @@
-import React, { useState, useEffect, useNavigate } from "react";
+/** @format */
+
+import React, { useState } from "react";
 import "../App.css";
 import { Button, Modal, Task } from "../components";
 import { Api } from "../api/Api";
 import { Storage } from "../storage/Storage";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const navigate = useNavigate();
-  const [data, setData] = useState(JSON.parse(Storage.get("user")));
+  const user = JSON.parse(Storage.get("user"));
   const [active, setActive] = useState(0);
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(user.todos);
+  const [render, setRender] = useState(true);
   const [modal, setModal] = useState(false);
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState([]);
   const [task, setTask] = useState({
-    done: false,
-  });
-
-  useEffect(() => {
-
+    uid: user.id,
   });
 
   const showTasks = () => {
@@ -26,20 +26,33 @@ function Dashboard() {
   const showHistory = () => {
     setActive(1);
   };
-  const deleteTask = (event, key) => {
-    tasks.pop(key);
+
+  const deleteTask = (event, key, id) => {
+    Api(`/todo/${id}`, null, "DELETE")
+      .then((res) => res.json())
+      .then((data) => {
+        let val = tasks;
+        val.splice(key, 1);
+        setTasks(val);
+        setRender(!render);
+      })
+      .catch((err) => console.log(err));
   };
 
-  const addTask = () => {
+  const openModal = () => {
     setModal(true);
   };
 
   const saveTask = (e) => {
     e.preventDefault();
-    task.email = data.email;
-    Api(`/todo`, task, "POST", null)
+    Api(`/todo`, task, "POST")
       .then((res) => res.json())
-      .then((data) => console.log(data))
+      .then((data) => {
+        let val = tasks;
+        val.unshift(data);
+        setTasks(val);
+        setModal(false);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -47,8 +60,12 @@ function Dashboard() {
     setTask({ ...task, [e.target.name]: e.target.value });
   };
 
-  const filterRecords = (e) => {
-    setFilter(e);
+  const filterTasks = (e) => {
+    let filteredTasks;
+    filteredTasks = tasks.filter((arr) => {
+      return arr.category === e;
+    });
+    setFilter(filteredTasks);
   };
 
   const logout = (e) => {
@@ -60,10 +77,12 @@ function Dashboard() {
     <>
       <header className='container header'>
         <div>
-          <h1>Agenda</h1>
-          <p>{data.email}</p>
+          <h1>Todo</h1>
+          <p>{user.email}</p>
         </div>
-        <button className='btn' onClick={logout}>log out</button>
+        <button className='btn' onClick={logout}>
+          log out
+        </button>
       </header>
       <main>
         <section className='container'>
@@ -71,29 +90,29 @@ function Dashboard() {
           <div className='grid'>
             <Button.Category
               icon={"material-symbols:work-outline"}
-              handleClick={""}
+              handleClick={() => filterTasks("Work")}
               title={"Work"}
             />
             <Button.Category
               icon={
                 "streamline:health-medical-heart-rate-health-beauty-information-data-beat-pulse-monitor-heart-rate-info"
               }
-              handleClick={""}
+              handleClick={() => filterTasks("Fitness")}
               title={"Fitness"}
             />
             <Button.Category
               icon={"map:beauty-salon"}
-              handleClick={""}
+              handleClick={() => filterTasks("Beauty")}
               title={"Beauty"}
             />
             <Button.Category
               icon={"carbon:pedestrian-family"}
-              handleClick={""}
+              handleClick={() => filterTasks("Family")}
               title={"Family"}
             />
             <Button.Category
               icon={"basil:group-151-outline"}
-              handleClick={""}
+              handleClick={() => filterTasks("Social")}
               title={"Social"}
             />
           </div>
@@ -105,18 +124,30 @@ function Dashboard() {
           </div>
           {active === 0 ? (
             <Task.Container>
-              {tasks.map((item, key) => {
-                return (
-                  <Task.Item
-                    key={key}
-                    taskId={item.id}
-                    title={item.title}
-                    done={item.done}
-                    deleteTask={(e) => deleteTask(e, key)}
-                  />
-                );
-              })}
-              <button onClick={addTask} className='btn'>
+              {filter.length > 0
+                ? filter.map((item, key) => {
+                    return (
+                      <Task.Item
+                        key={key}
+                        taskId={item.id}
+                        title={item.title}
+                        done={item.completed}
+                        deleteTask={(e) => deleteTask(e, key, item.id)}
+                      />
+                    );
+                  })
+                : tasks.map((item, key) => {
+                    return (
+                      <Task.Item
+                        key={key}
+                        taskId={item.id}
+                        title={item.title}
+                        done={item.completed}
+                        deleteTask={(e) => deleteTask(e, key, item.id)}
+                      />
+                    );
+                  })}
+              <button onClick={openModal} className='btn'>
                 Add Task
               </button>
             </Task.Container>

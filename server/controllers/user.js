@@ -40,6 +40,7 @@ exports.login = (req, res) => {
       where: {
         email: email,
       },
+      order: [[todo, "id", "DESC"]],
     })
     .then(async (response) => {
       if (response) {
@@ -50,7 +51,7 @@ exports.login = (req, res) => {
             expiresIn: 1 * 24 * 60 * 60 * 1000,
           });
           values.accessToken = token;
-          res.cookie({ "token": token });
+          res.cookie({ token: token });
           res.status(201).send(values);
         } else {
           return res.status(401).send("Authentication failed");
