@@ -1,30 +1,62 @@
-/** @format */
-
-import { Button } from "../Button/Button";
-import "../Button/Button.css";
+import React, { useState } from "react";
+import { Icon } from "@iconify/react";
+import { Button } from "../Button";
+import { Form } from "../Form";
 import "./Task.css";
 
 export const Task = {
   Container: ({ children }) => {
     return <div id='tasks'>{children}</div>;
   },
-  Item: ({ title, description, done, editTask, deleteTask, taskId }) => {
+  Item: ({
+    title,
+    description,
+    category,
+    done,
+    date,
+    time,
+    editTask,
+    deleteTask,
+    taskId,
+  }) => {
     return (
       <div className='task' id={taskId}>
-        <div className='flex'>
+        <div className='flex-start'>
           <input
             type='checkbox'
-            checked={!done ? false : true}></input>
+            checked={done === false ? false : true}></input>
           <div className='content'>
             <input
-              className='title'
+              className='task-title'
               type='text'
               value={title}
               onChange={editTask}
             />
             {description ? (
-              <textarea rows={"auto"}>{description}</textarea>
+              <textarea className='task-desc' rows={"auto"}>
+                {description}
+              </textarea>
             ) : null}
+            <div className='other'>
+              <div className='reminder'>
+                {date ? (
+                  <div className='task-tag'>
+                    <Icon icon='ic:outline-date-range' width={18} />
+                    <span className='cat'>{date}</span>
+                  </div>
+                ) : null}
+                {time ? (
+                  <div className='task-tag'>
+                    <Icon
+                      icon='material-symbols:nest-clock-farsight-analog-outline-rounded'
+                      width={18}
+                    />
+                    <span className='cat'>{time}</span>
+                  </div>
+                ) : null}
+              </div>
+              {category ? <span className='task-cat'>#{category}</span> : null}
+            </div>
           </div>
         </div>
         <Button.Icon action={"delete"} handleClick={deleteTask} />
@@ -33,6 +65,7 @@ export const Task = {
   },
 
   New: ({ handleChange, submit, modal }) => {
+    const [cat, setCat] = useState(false);
     return (
       <>
         <div className='flex-group'>
@@ -41,85 +74,85 @@ export const Task = {
             onClick={() => {
               modal(false);
             }}>
-            close
+            <Icon icon='material-symbols:close-rounded' width={20} />
           </button>
         </div>
-
-        <form>
-          <div className='form-group'>
-            <label>Title</label>
-            <input
-              type='text'
-              name='title'
-              placeholder='Bake a cake'
-              onChange={handleChange}
-            />
-          </div>
-          <div className='form-group'>
-            <label>Description</label>
-            <textarea
-              name='description'
-              placeholder='Bake a cake'
-              onChange={handleChange}></textarea>
-          </div>
-
+        <Form.Container>
+          <Form.Input
+            label={"Title"}
+            type={"text"}
+            name={"title"}
+            handleChange={handleChange}
+          />
+          <Form.Input
+            label={"Description"}
+            type={"text"}
+            name={"description"}
+            handleChange={handleChange}
+          />
           <div className='form-group'>
             <label>Category</label>
             <div className='auto-grid'>
               <input
-                name='tag'
-                className='btn-tag'
+                name='category'
+                className='category'
                 type='button'
                 value={"Work"}
                 onClick={handleChange}
               />
               <input
-                name='tag'
-                className='btn-tag'
+                name='category'
+                className='category'
                 type='button'
                 value={"Fitness"}
                 onClick={handleChange}
               />
               <input
-                name='tag'
-                className='btn-tag'
+                name='category'
+                className='category'
                 type='button'
                 value={"Family"}
                 onClick={handleChange}
               />
               <input
-                name='newTag'
-                className='btn-tag'
+                name='newCategory'
+                className='category'
                 type='button'
                 value={"New Tag"}
+                onClick={() => {
+                  setCat(!cat);
+                }}
               />
             </div>
+            {cat ? (
+              <Form.Input
+                type={"text"}
+                name={"category"}
+                handleChange={handleChange}
+              />
+            ) : null}
           </div>
-          <h3>Set Reminder</h3>
+          <h3 className='mt-5'>Set Reminder</h3>
           <div className='flex-group'>
-            <div className='form-group'>
-              <label>Date</label>
-              <input
-                type='date'
-                name='date'
-                placeholder='Bake a cake'
-                onChange={handleChange}
-              />
-            </div>
-            <div className='form-group'>
-              <label>Time</label>
-              <input
-                type='time'
-                name='time'
-                placeholder='Bake a cake'
-                onChange={handleChange}
-              />
-            </div>
+            <Form.Input
+              label={"Date"}
+              type={"date"}
+              name={"date"}
+              handleChange={handleChange}
+            />
+            <Form.Input
+              label={"Time"}
+              type={"time"}
+              name={"time"}
+              handleChange={handleChange}
+            />
           </div>
-          <button type='submit' className='btn' onClick={submit}>
-            Add Task
-          </button>
-        </form>
+          <Button.Sm
+            label={"Add Task"}
+            type={"submit"}
+            handleClick={{ submit }}
+          />
+        </Form.Container>
       </>
     );
   },

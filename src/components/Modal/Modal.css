@@ -1,19 +1,10 @@
-:root {
-    --primary: #0092FF;
-    --secondary: #ff6f00;
-    --success: #05C91A;
-    --error: #F90606;
-    --white: #fafafa;
-    --dark: #00101d;
-}
-
 .modal {
     position: fixed;
     left: 0;
     top: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--dark);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -24,5 +15,9 @@
     min-width: 350px;
     background-color: var(--white);
     border-radius: 10px;
-    padding: 10px;
+    padding: 10px 20px;
+}
+
+.dark .modal-content {
+    background-color: var(--dark) !important;
 }
