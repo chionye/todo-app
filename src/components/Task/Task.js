@@ -1,12 +1,12 @@
-/** @format */
-
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { Button } from "../Button/Button";
 import { Form } from "../Form/Form";
 import "./Task.css";
 
+
 export const Task = {
+
   Container: ({ children }) => {
     return <div id='tasks'>{children}</div>;
   },
@@ -15,37 +15,46 @@ export const Task = {
     description,
     category,
     handleChange,
-    done,
     date,
     time,
-    setTitle,
-    setDesc,
-    setDate,
-    setTime,
+    completed,
+    setCheck,
+    position,
     editTask,
     deleteTask,
     taskId,
   }) => {
+    const [done, setDone] = useState(completed);
+    const handleCheck = (e) => {
+      setDone(!done);
+      setCheck(!done, position, taskId);
+    };
     return (
       <form className='task' id={taskId}>
         <div className='flex-start'>
-          <input type='checkbox' checked={!done ? false : true}></input>
+          <input
+            type='checkbox'
+            name='completed'
+            onChange={handleCheck}
+            checked={done}
+          />
           <div className='content'>
             <input
-              className='task-title'
+              className={`task-title ${done ? "strike" : ""}`}
               type='text'
+              name='title'
               placeholder={title}
-              onChange={(e) => {
-                setTitle(e.target.value);
-              }}
+              onChange={handleChange}
+              disabled={done}
               onFocus={(e) => (e.target.value = e.target.placeholder)}
             />
             {description ? (
               <textarea
                 className='task-desc'
-                id={`frm${taskId}`}
-                rows={"auto"}
-                onChange={(e) => setDesc(e.target.value)}>
+                onChange={handleChange}
+                name='description'
+                disabled={done}
+                rows={"auto"}>
                 {description}
               </textarea>
             ) : null}
@@ -57,8 +66,10 @@ export const Task = {
                     <input
                       type='text'
                       className='cat'
+                      name='date'
                       placeholder={date}
-                      onChange={(e) => setDate(e.target.value)}
+                      disabled={done}
+                      onChange={handleChange}
                       onFocus={(e) => (e.target.value = e.target.placeholder)}
                     />
                   </div>
@@ -72,8 +83,10 @@ export const Task = {
                     <input
                       type='text'
                       className='cat'
+                      name='time'
                       placeholder={time}
-                      onChange={(e) => setTime(e.target.value)}
+                      disabled={done}
+                      onChange={handleChange}
                       onFocus={(e) => (e.target.value = e.target.placeholder)}
                     />
                   </div>
@@ -84,9 +97,7 @@ export const Task = {
           </div>
         </div>
         <div className='flex-center'>
-          {handleChange ? (
-            <Button.Icon type='submit' action={"edit"} handleClick={editTask} />
-          ) : null}
+          <Button.Icon type='submit' action={"edit"} handleClick={editTask} />
           <Button.Icon action={"delete"} handleClick={deleteTask} />
         </div>
       </form>
@@ -176,11 +187,7 @@ export const Task = {
               handleChange={handleChange}
             />
           </div>
-          <Button.Sm
-            label={"Add Task"}
-            type={"submit"}
-            handleClick={{ submit }}
-          />
+          <Button.Sm label={"Add Task"} type={"submit"} handleClick={submit} />
         </Form.Container>
       </>
     );

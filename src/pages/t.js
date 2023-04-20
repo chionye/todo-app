@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import { Alert, Button, Empty, Logo, Modal, Task } from "../components";
+import { Button, Empty, Logo, Modal, Task } from "../components";
 import "../App.css";
 import { Api } from "../api/Api";
 import { Storage } from "../storage/Storage";
@@ -10,31 +10,28 @@ import { useNavigate } from "react-router-dom";
 function Dashboard() {
   const navigate = useNavigate();
   const user = JSON.parse(Storage.get("user"));
-  const [render, setRender] = useState(true);
   const [tasks, setTasks] = useState(user.todos);
+  const [render, setRender] = useState(true);
   const [modal, setModal] = useState(false);
-  const [filter, setFilter] = useState(user.todos);
+  const [title, setTitle] = useState();
+  const [desc, setDesc] = useState();
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [filter, setFilter] = useState([]);
   const [category, setCategory] = useState([]);
-  const [editData, setEditData] = useState({});
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
   const [task, setTask] = useState({
     uid: user.id,
   });
-  const updateCategories = () => {
+
+  useEffect(() => {
     let filteredCategories;
     filteredCategories = tasks.map((arr) => {
       return arr.category;
     });
     setCategory([...new Set(filteredCategories)]);
-  };
-
-  useEffect(() => {
-    updateCategories();
   }, []);
 
   const deleteTask = (event, key, id) => {
-    event.preventDefault();
     Api(`/todo/${id}`, null, "DELETE")
       .then((res) => res.json())
       .then((data) => {
@@ -43,16 +40,12 @@ function Dashboard() {
         user.todos = val;
         Storage.set("user", JSON.stringify(user));
         setTasks(val);
-        setSuccess("Delete successful!");
-        setTimeout(() => {
-          setSuccess("");
-        }, "3000");
         setRender(!render);
       })
       .catch((err) => console.log(err));
   };
 
-  const addTask = () => {
+  const openModal = () => {
     setModal(true);
   };
 
@@ -66,11 +59,6 @@ function Dashboard() {
         user.todos = val;
         Storage.set("user", JSON.stringify(user));
         setTasks(val);
-        setSuccess("You have added a new task!");
-        setTimeout(() => {
-          setSuccess("");
-        }, "3000");
-        updateCategories();
         setModal(false);
       })
       .catch((err) => console.log(err));
@@ -78,29 +66,6 @@ function Dashboard() {
 
   const handleChange = (e) => {
     setTask({ ...task, [e.target.name]: e.target.value });
-  };
-
-  const handleEditChange = (e) => {
-    setEditData({ ...editData, [e.target.name]: e.target.value });
-  };
-
-  const handleCheck = (status, key, id) => {
-    const completionStatus = {completed: status};
-    Api(`/todo/${id}`, completionStatus, "PUT")
-      .then((res) => res.json())
-      .then((data) => {
-        let val = tasks;
-        val[key] = { ...tasks[key], ...completionStatus };
-        user.todos = val;
-        Storage.set("user", JSON.stringify(user));
-        setTasks(val);
-        setSuccess("Task status updated!");
-        setTimeout(() => {
-          setSuccess("");
-        }, "3000");
-        setRender(!render);
-      })
-      .catch((err) => console.log(err));
   };
 
   const filterTasks = (e) => {
@@ -122,20 +87,17 @@ function Dashboard() {
 
   const editTask = (e, key, id) => {
     e.preventDefault();
-    Api(`/todo/${id}`, editData, "PUT")
-      .then((res) => res.json())
-      .then((data) => {
-        let val = tasks;
-        val[key] = { ...tasks[key], ...editData };
-        user.todos = val;
-        Storage.set("user", JSON.stringify(user));
-        setTasks(val);
-        setSuccess("Edit Successful!");
-        setTimeout(() => {
-          setSuccess("");
-        }, "3000");
-      })
-      .catch((err) => console.log(err));
+    let edit = {};
+    if (title) edit.title = title;
+    if (desc) edit.description = desc;
+    if (date) edit.date = date;
+    if (time) edit.time = time;
+    let val = tasks[key];
+    console.log(val, { ...val, ...edit });
+  };
+
+  const dd = (e) => {
+    return console.log(e.target.value);
   };
 
   return (
@@ -147,14 +109,14 @@ function Dashboard() {
         </div>
         <div className='flex-center'>
           <Button.Toggle />
-          <Button.Sm label={"Log Out"} handleClick={logout} />
+          <Button.Sm label={"Log Out"} onClick={logout} />
         </div>
       </header>
       <main>
         <section className='container'>
           <div className='flex-group'>
             <h1 className='heading'>My Tasks</h1>
-            <Button.Icon label='Task' action={"add"} handleClick={addTask} />
+            <Button.Icon label='Task' action={"add"} handleClick={openModal} />
           </div>
 
           <div className='grid'>
@@ -173,8 +135,6 @@ function Dashboard() {
                 })
               : null}
           </div>
-          {error ? <Alert status={"error"} message={error} /> : null}
-          {success ? <Alert status={"success"} message={success} /> : null}
           <Task.Container>
             {filter.length > 0
               ? filter.map((item, key) => {
@@ -187,16 +147,32 @@ function Dashboard() {
                       date={item.date}
                       time={item.time}
                       category={item.category}
-                      completed={item.completed}
-                      setCheck={handleCheck}
-                      position={key}
-                      handleChange={handleEditChange}
+                      setTitle={setTitle}
+                      setDesc={setDesc}
+                      setDate={setDate}
+                      setTime={setTime}
+                      done={item.completed}
+                      f={dd}
                       editTask={(e) => editTask(e, key, item.id)}
                       deleteTask={(e) => deleteTask(e, key, item.id)}
                     />
                   );
                 })
-              : (<Empty />)}
+              : tasks.map((item, key) => {
+                  return (
+                    <Task.Item
+                      key={key}
+                      taskId={item.id}
+                      title={item.title}
+                      description={item.description}
+                      date={item.date}
+                      time={item.time}
+                      category={item.category}
+                      done={item.completed}
+                      deleteTask={(e) => deleteTask(e, key, item.id)}
+                    />
+                  );
+                })}
           </Task.Container>
         </section>
         <Modal

@@ -129,6 +129,10 @@ input.category {
     margin-top: 5px;
 }
 
+.strike{
+    text-decoration: line-through;
+}
+
 @media screen and (max-width: 600px) {
     .task {
         width: 100%;

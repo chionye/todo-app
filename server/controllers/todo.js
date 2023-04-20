@@ -14,7 +14,7 @@ exports.create = (req, res) => {
     uid: req.body.uid,
     title: req.body.title,
     description: req.body.description,
-    category: req.body.tag,
+    category: req.body.category,
     date: req.body.date,
     time: req.body.time,
   };
@@ -70,13 +70,15 @@ exports.findOne = (req, res) => {
 
 exports.update = (req, res) => {
   const id = req.params.id;
+console.log(id, req.body)
+
 
   todo
     .update(req.body, {
       where: { id: id },
     })
     .then((num) => {
-      if (num === 1) {
+      if (num[0] === 1) {
         res.send({
           message: "Update successful.",
         });
