@@ -1,0 +1,13 @@
+/** @format */
+
+import "./Empty.css";
+
+export const Empty = ({ message }) => {
+  return <div className='empty'>{message}</div>;
+};
+.empty {
+    text-align: center;
+    font-weight: 600;
+    font-size: 20px;
+    color: rgb(165, 164, 164);
+}
