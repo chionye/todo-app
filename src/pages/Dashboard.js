@@ -1,6 +1,4 @@
-/** @format */
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../App.css";
 import { Button, Modal, Task } from "../components";
 import { Api } from "../api/Api";
@@ -15,9 +13,18 @@ function Dashboard() {
   const [render, setRender] = useState(true);
   const [modal, setModal] = useState(false);
   const [filter, setFilter] = useState([]);
+  const [category, setCategory] = useState([]);
   const [task, setTask] = useState({
     uid: user.id,
   });
+
+  useEffect(() => {
+    let filteredCategories;
+    filteredCategories = tasks.map((arr) => {
+      return arr.category;
+    });
+    setCategory([...new Set(filteredCategories)]);
+  }, []);
 
   const showTasks = () => {
     setActive(0);
@@ -33,6 +40,8 @@ function Dashboard() {
       .then((data) => {
         let val = tasks;
         val.splice(key, 1);
+        user.todos = val;
+        Storage.set("user", JSON.stringify(user));
         setTasks(val);
         setRender(!render);
       })
@@ -50,6 +59,8 @@ function Dashboard() {
       .then((data) => {
         let val = tasks;
         val.unshift(data);
+        user.todos = val;
+        Storage.set("user", JSON.stringify(user));
         setTasks(val);
         setModal(false);
       })
