@@ -1,6 +1,8 @@
+/** @format */
+
 import React, { useState, useEffect } from "react";
+import { Button, Empty, Logo, Modal, Task } from "../components";
 import "../App.css";
-import { Button, Modal, Task } from "../components";
 import { Api } from "../api/Api";
 import { Storage } from "../storage/Storage";
 import { useNavigate } from "react-router-dom";
@@ -8,10 +10,13 @@ import { useNavigate } from "react-router-dom";
 function Dashboard() {
   const navigate = useNavigate();
   const user = JSON.parse(Storage.get("user"));
-  const [active, setActive] = useState(0);
   const [tasks, setTasks] = useState(user.todos);
   const [render, setRender] = useState(true);
   const [modal, setModal] = useState(false);
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
   const [filter, setFilter] = useState([]);
   const [category, setCategory] = useState([]);
   const [task, setTask] = useState({
@@ -25,14 +30,6 @@ function Dashboard() {
     });
     setCategory([...new Set(filteredCategories)]);
   }, []);
-
-  const showTasks = () => {
-    setActive(0);
-  };
-
-  const showHistory = () => {
-    setActive(1);
-  };
 
   const deleteTask = (event, key, id) => {
     Api(`/todo/${id}`, null, "DELETE")
@@ -72,6 +69,10 @@ function Dashboard() {
   };
 
   const filterTasks = (e) => {
+    if(e === "All"){
+      setFilter(tasks);
+      return;
+    }
     let filteredTasks;
     filteredTasks = tasks.filter((arr) => {
       return arr.category === e;
@@ -84,87 +85,90 @@ function Dashboard() {
     navigate("/");
   };
 
+  const editTask = (e, key, id) => {
+    e.preventDefault();
+    const edit = {};
+    if(title) edit.title = title;
+    if(desc) edit.description = desc;
+    if(date) edit.date = date;
+    if (time) edit.time = time;
+   let val = tasks[key];
+   console.log(val, { ...val, ...edit });
+  }
+
   return (
     <>
       <header className='container header'>
         <div>
-          <h1>Todo</h1>
-          <p>{user.email}</p>
+          <Logo />
+          <p>{user?.email}</p>
         </div>
-        <button className='btn' onClick={logout}>
-          log out
-        </button>
+        <div className='flex-center'>
+          <Button.Toggle />
+          <Button.Sm label={"Log Out"} onClick={logout} />
+        </div>
       </header>
       <main>
         <section className='container'>
-          <h2 className='heading'>categories</h2>
+          <div className='flex-group'>
+            <h1 className='heading'>My Tasks</h1>
+            <Button.Icon label='Task' action={"add"} handleClick={openModal} />
+          </div>
+
           <div className='grid'>
             <Button.Category
-              icon={"material-symbols:work-outline"}
-              handleClick={() => filterTasks("Work")}
-              title={"Work"}
+              handleClick={() => filterTasks("All")}
+              title={"All"}
             />
-            <Button.Category
-              icon={
-                "streamline:health-medical-heart-rate-health-beauty-information-data-beat-pulse-monitor-heart-rate-info"
-              }
-              handleClick={() => filterTasks("Fitness")}
-              title={"Fitness"}
-            />
-            <Button.Category
-              icon={"map:beauty-salon"}
-              handleClick={() => filterTasks("Beauty")}
-              title={"Beauty"}
-            />
-            <Button.Category
-              icon={"carbon:pedestrian-family"}
-              handleClick={() => filterTasks("Family")}
-              title={"Family"}
-            />
-            <Button.Category
-              icon={"basil:group-151-outline"}
-              handleClick={() => filterTasks("Social")}
-              title={"Social"}
-            />
+            {category
+              ? category.map((item, key) => {
+                  return (
+                    <Button.Category
+                      handleClick={() => filterTasks(item)}
+                      title={item}
+                    />
+                  );
+                })
+              : null}
           </div>
-        </section>
-        <section className='container'>
-          <div className='tabs'>
-            <Button.Tab handleClick={showTasks} title={"Tasks"} />
-            <Button.Tab handleClick={showHistory} title={"History"} />
-          </div>
-          {active === 0 ? (
-            <Task.Container>
-              {filter.length > 0
-                ? filter.map((item, key) => {
-                    return (
-                      <Task.Item
-                        key={key}
-                        taskId={item.id}
-                        title={item.title}
-                        done={item.completed}
-                        deleteTask={(e) => deleteTask(e, key, item.id)}
-                      />
-                    );
-                  })
-                : tasks.map((item, key) => {
-                    return (
-                      <Task.Item
-                        key={key}
-                        taskId={item.id}
-                        title={item.title}
-                        done={item.completed}
-                        deleteTask={(e) => deleteTask(e, key, item.id)}
-                      />
-                    );
-                  })}
-              <button onClick={openModal} className='btn'>
-                Add Task
-              </button>
-            </Task.Container>
-          ) : (
-            <div>history</div>
-          )}
+          <Task.Container>
+            {filter.length > 0
+              ? filter.map((item, key) => {
+                  return (
+                    <Task.Item
+                      key={key}
+                      taskId={item.id}
+                      title={item.title}
+                      description={item.description}
+                      date={item.date}
+                      time={item.time}
+                      category={item.category}
+                      setTitle={setTitle}
+                      setDesc={setDesc}
+                      setDate={setDate}
+                      setTime={setTime}
+                      done={item.completed}
+                      editTask={(e) => editTask(e, key, item.id)}
+                      deleteTask={(e) => deleteTask(e, key, item.id)}
+                    />
+                  );
+                })
+              : tasks.map((item, key) => {
+                  return (
+                    <Task.Item
+                      key={key}
+                      taskId={item.id}
+                      title={item.title}
+                      description={item.description}
+                      date={item.date}
+                      time={item.time}
+                      category={item.category}
+                      done={item.completed}
+                      deleteTask={(e) => deleteTask(e, key, item.id)}
+                    />
+                  );
+                })}
+          </Task.Container>
         </section>
         <Modal
           show={modal}

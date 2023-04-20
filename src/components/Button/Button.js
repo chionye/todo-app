@@ -1,3 +1,5 @@
+/** @format */
+
 import { Icon } from "@iconify/react";
 import "./Button.css";
 
@@ -23,6 +25,8 @@ export const Button = {
           icon={
             action === "add"
               ? "material-symbols:add"
+              : action === "edit"
+              ? "ic:baseline-check"
               : "material-symbols:delete-outline-rounded"
           }
           color={action === "add" ? "#0092FF" : "#F90606"}

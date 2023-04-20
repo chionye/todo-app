@@ -1,7 +1,9 @@
+/** @format */
+
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-import { Button } from "../Button";
-import { Form } from "../Form";
+import { Button } from "../Button/Button";
+import { Form } from "../Form/Form";
 import "./Task.css";
 
 export const Task = {
@@ -12,28 +14,38 @@ export const Task = {
     title,
     description,
     category,
+    handleChange,
     done,
     date,
     time,
+    setTitle,
+    setDesc,
+    setDate,
+    setTime,
     editTask,
     deleteTask,
     taskId,
   }) => {
     return (
-      <div className='task' id={taskId}>
+      <form className='task' id={taskId}>
         <div className='flex-start'>
-          <input
-            type='checkbox'
-            checked={done === false ? false : true}></input>
+          <input type='checkbox' checked={!done ? false : true}></input>
           <div className='content'>
             <input
               className='task-title'
               type='text'
-              value={title}
-              onChange={editTask}
+              placeholder={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+              onFocus={(e) => (e.target.value = e.target.placeholder)}
             />
             {description ? (
-              <textarea className='task-desc' rows={"auto"}>
+              <textarea
+                className='task-desc'
+                id={`frm${taskId}`}
+                rows={"auto"}
+                onChange={(e) => setDesc(e.target.value)}>
                 {description}
               </textarea>
             ) : null}
@@ -42,7 +54,13 @@ export const Task = {
                 {date ? (
                   <div className='task-tag'>
                     <Icon icon='ic:outline-date-range' width={18} />
-                    <span className='cat'>{date}</span>
+                    <input
+                      type='text'
+                      className='cat'
+                      placeholder={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      onFocus={(e) => (e.target.value = e.target.placeholder)}
+                    />
                   </div>
                 ) : null}
                 {time ? (
@@ -51,7 +69,13 @@ export const Task = {
                       icon='material-symbols:nest-clock-farsight-analog-outline-rounded'
                       width={18}
                     />
-                    <span className='cat'>{time}</span>
+                    <input
+                      type='text'
+                      className='cat'
+                      placeholder={time}
+                      onChange={(e) => setTime(e.target.value)}
+                      onFocus={(e) => (e.target.value = e.target.placeholder)}
+                    />
                   </div>
                 ) : null}
               </div>
@@ -59,8 +83,13 @@ export const Task = {
             </div>
           </div>
         </div>
-        <Button.Icon action={"delete"} handleClick={deleteTask} />
-      </div>
+        <div className='flex-center'>
+          {handleChange ? (
+            <Button.Icon type='submit' action={"edit"} handleClick={editTask} />
+          ) : null}
+          <Button.Icon action={"delete"} handleClick={deleteTask} />
+        </div>
+      </form>
     );
   },
 

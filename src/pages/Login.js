@@ -1,9 +1,9 @@
 /** @format */
 
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useContext } from "react";
-import "./Login.css";
-import { Alert, Form, Button, Loader, Logo } from "../components";
+import React, { useState } from "react";
+import "../Login.css";
+import { Alert, Form, Button, Logo } from "../components";
 import { Api } from "../api/Api";
 import { Storage } from "../storage/Storage";
 
@@ -21,10 +21,11 @@ function Login() {
       Api(`/user/login`, user, "POST")
         .then((res) => res.json())
         .then((data) => {
-          if (data.status === "ok") {
+          if (data.id) {
+            setSuccess("Login Successful!");
             Storage.set("user", JSON.stringify(data));
             navigate("/dashboard");
-          }else{
+          } else {
             setError(data.message);
             setTimeout(() => {
               setError("");

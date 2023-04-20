@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/db.config");
 
 exports.register = async (req, res) => {
-  if (!req.body.email) {
+  if (!req.body.email || !req.body.password) {
     res.status(400).send({
       message: "Content can not be empty!",
     });

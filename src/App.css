@@ -1,10 +1,6 @@
-:root {
-  --primary: #0092FF;
-  --secondary: #ff6f00;
-  --success: #05C91A;
-  --error: #F90606;
-  --white: #fafafa;
-  --dark: #00101d;
+main {
+  width: 70%;
+  margin: 0 auto;
 }
 
 .container {
@@ -15,13 +11,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+  box-shadow: var(--shadow);
 }
 
-.heading {
-  text-transform: capitalize;
-  margin-top: 10px;
-}
 
 
 .grid {
@@ -30,14 +22,13 @@
   overflow-x: scroll;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  column-gap: 40px;
+  column-gap: 10px;
 }
 
-.btn {
-  background-color: var(--primary);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-transform: capitalize;
-  color: var(--white)
+
+
+@media screen and (max-width: 600px) {
+  main {
+    width: 100%;
+  }
 }
