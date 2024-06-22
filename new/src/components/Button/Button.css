@@ -1,0 +1,50 @@
+/* .Button Container */
+.button {
+  display: inline-block;
+  padding: 12px 24px;           /* Adjust padding for size */
+  font-size: 14px;              /* Adjust font size */
+  font-weight: bold; 
+  text-transform: capitalize;           /* Make text bold for better readability */
+  color: #FFFFFF;               /* Text color */
+  background-color: #1ABC9C;    /* Background color (Teal) */
+  border: none;                 /* Remove default border */
+  border-radius: 8px;           /* Rounded corners */
+  text-align: center;           /* Center text */
+  text-decoration: none;        /* Remove underline */
+  cursor: pointer;              /* Pointer cursor on hover */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Hover State */
+.button:hover {
+  background-color: #16A085;    /* Slightly darker teal for hover effect */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+  color: #FFFFFF;  /* Enhance shadow on hover */
+}
+
+/* Active/Pressed State */
+.button:active {
+  background-color: #149174;    /* Even darker teal for active state */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Reduce shadow for pressed effect */
+}
+
+/* Focus State for Accessibility */
+.button:focus {
+  outline: none;                /* Remove default focus outline */
+  box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.4); /* Custom focus outline */
+}
+
+/* Disabled State */
+.button:disabled {
+  background-color: #95A5A6;    /* Gray background for disabled state */
+  cursor: not-allowed;          /* Not-allowed cursor for disabled state */
+  box-shadow: none;             /* Remove shadow for disabled state */
+  color: #BDC3C7;               /* Lighten text color */
+}
+
+/* Additional Styles for Icons (if needed) */
+.button .icon {
+  margin-right: 8px;            /* Space between icon and text */
+  vertical-align: middle;       /* Align icon vertically with text */
+}
